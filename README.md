@@ -1,56 +1,84 @@
-# Welcome to your Expo app 👋
+# Pocket Money Tracker 💸
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A clean, dark-themed mobile app for tracking budget entries and expenses — built with **React Native** and **Expo**.
 
-## Get started
+Create budget entries (e.g. "Pocket money for July"), set a budget amount, then log individual expenses against it. A live budget bar shows you how much you've spent and how much remains at a glance.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## Features
 
-2. Start the app
+- 📋 **Budget entries** — Create named entries with a total budget and currency
+- 💰 **Expense tracking** — Log individual expenses with a name and cost
+- 📊 **Live budget bar** — Visual indicator of remaining vs spent budget
+- 🌍 **Multi-currency support** — Choose from a list of supported currencies
+- 🗑️ **Delete entries & expenses** — Full CRUD support
+- 💾 **Persistent storage** — Data saved locally via AsyncStorage
+- 🌑 **Dark mode UI** — Fully dark themed interface
 
-   ```bash
-   npx expo start
-   ```
+## Tech Stack
 
-In the output, you'll find options to open the app in a
+| Layer | Technology |
+|---|---|
+| Framework | [Expo](https://expo.dev) (SDK 57) |
+| Language | TypeScript |
+| Navigation | [Expo Router](https://expo.github.io/router) (file-based) |
+| Storage | [@react-native-async-storage/async-storage](https://github.com/react-native-async-storage/async-storage) |
+| Animations | [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) |
+| State | React Context API |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+src/
+├── app/                  # File-based routes (Expo Router)
+│   ├── index.tsx         # Home screen — list of all entries
+│   ├── create.tsx        # Create a new budget entry
+│   ├── entry/[id].tsx    # Entry detail — expenses list + add expense
+│   └── edit/[id].tsx     # Edit an existing entry
+├── components/           # Reusable UI components
+├── constants/            # Theme tokens (colors, spacing, fonts)
+├── context/              # EntriesContext — global state & persistence
+├── utils/                # Helper functions (formatting, calculations)
+└── types.ts              # TypeScript interfaces (Entry, Expense)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting Started
 
-### Other setup steps
+### Prerequisites
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+- [Node.js](https://nodejs.org/) (v18+)
+- [Expo Go](https://expo.dev/go) app on your phone, or an Android/iOS emulator
 
-## Learn more
+### Run locally
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+# Install dependencies
+npm install
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+# Start the dev server
+npx expo start
+```
 
-## Join the community
+Scan the QR code with **Expo Go** (Android) or the Camera app (iOS) to open the app on your device.
 
-Join our community of developers creating universal apps.
+## Building the APK
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project uses [EAS Build](https://docs.expo.dev/build/introduction/) for cloud builds.
+
+```bash
+# Install EAS CLI
+npm install -g eas-cli
+
+# Log in to your Expo account
+eas login
+
+# Build a preview APK (Android)
+eas build -p android --profile preview
+```
+
+The APK download link will be available in your [Expo dashboard](https://expo.dev) once the build completes (~10–15 min).
+
+## License
+
+[MIT](./LICENSE)
