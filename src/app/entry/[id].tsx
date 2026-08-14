@@ -2,7 +2,7 @@
  * Entry Detail Screen — Shows all expenses for an entry with real-time
  * budget calculation and a remaining budget bar.
  */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
   Platform,
   Alert,
   Animated,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -44,6 +45,14 @@ export default function EntryDetailScreen() {
   const [costInput, setCostInput] = useState('');
   const taskInputRef = useRef<TextInput>(null);
   const costInputRef = useRef<TextInput>(null);
+  const listRef = useRef<FlatList>(null);
+
+  const scrollToBottom = useCallback(() => {
+    // Small delay to let the keyboard finish animating before scrolling
+    setTimeout(() => {
+      listRef.current?.scrollToEnd({ animated: true });
+    }, 150);
+  }, []);
 
   const entry = getEntry(id ?? '');
 
@@ -100,8 +109,7 @@ export default function EntryDetailScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <KeyboardAvoidingView
         style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         {/* Header */}
         <View style={styles.header}>
@@ -144,6 +152,7 @@ export default function EntryDetailScreen() {
 
         {/* Expense list */}
         <FlatList
+          ref={listRef}
           data={entry.expenses}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
@@ -169,6 +178,7 @@ export default function EntryDetailScreen() {
               : styles.listContent
           }
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         />
 
         {/* Add expense input */}
@@ -182,6 +192,7 @@ export default function EntryDetailScreen() {
               placeholder="Expense name"
               placeholderTextColor={Colors.textTertiary}
               returnKeyType="next"
+              onFocus={scrollToBottom}
               onSubmitEditing={() => costInputRef.current?.focus()}
             />
             <TextInput
@@ -196,6 +207,7 @@ export default function EntryDetailScreen() {
               placeholderTextColor={Colors.textTertiary}
               keyboardType="numeric"
               returnKeyType="done"
+              onFocus={scrollToBottom}
               onSubmitEditing={handleAddExpense}
             />
             <Pressable
